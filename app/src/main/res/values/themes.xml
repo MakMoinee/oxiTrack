@@ -3,7 +3,19 @@
     <style name="Base.Theme.OxiTrack" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/red</item>
+        <item name="colorPrimaryVariant">@color/red</item>
+        <item name="colorOnPrimary">@color/white</item>
     </style>
 
     <style name="Theme.OxiTrack" parent="Base.Theme.OxiTrack" />
+
+    <style name="Theme.OxiTrack.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.OxiTrack.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.OxiTrack.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
