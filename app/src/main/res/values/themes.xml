@@ -18,4 +18,14 @@
     <style name="Theme.OxiTrack.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.OxiTrack.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="CustomStyleYellow" parent="Theme.Design.Light">
+        <item name="colorPrimary">#FFEB3B</item>
+        <item name="colorAccent">#FFEB3B</item>
+    </style>
+
+    <style name="CustomStyleBlue" parent="Theme.Design.Light">
+        <item name="colorPrimary">#03A9F4</item>
+        <item name="colorAccent">#2196F3</item>
+    </style>
 </resources>

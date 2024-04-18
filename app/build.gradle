@@ -56,6 +56,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore'
     implementation'com.github.MakMoinee:library:1.0.1-rc2'
     implementation 'org.projectlombok:lombok:1.18.28'
+    implementation 'com.android.volley:volley:1.2.1'
+    implementation 'com.google.code.gson:gson:2.10.1'
     annotationProcessor 'org.projectlombok:lombok:1.18.28'
     testImplementation 'org.projectlombok:lombok:1.18.28'
     androidTestImplementation 'org.projectlombok:lombok:1.18.28'

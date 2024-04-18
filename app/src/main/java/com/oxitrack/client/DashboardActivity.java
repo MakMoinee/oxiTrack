@@ -1,25 +1,28 @@
 package com.oxitrack.client;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.view.Menu;
+import android.widget.Toast;
 
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.navigation.NavigationView;
-
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.navigation.NavigationView;
 import com.oxitrack.client.databinding.ActivityDashboardBinding;
+import com.oxitrack.client.interfaces.LogoutListener;
+import com.oxitrack.client.preference.UserPref;
 
-public class DashboardActivity extends AppCompatActivity {
+public class DashboardActivity extends AppCompatActivity implements LogoutListener {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityDashboardBinding binding;
+
+    private NavController navController;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,26 +32,17 @@ public class DashboardActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarDashboard.toolbar);
-        binding.appBarDashboard.fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+                R.id.nav_home, R.id.nav_devices, R.id.nav_pulse, R.id.nav_logout)
                 .setOpenableLayout(drawer)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_dashboard);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_dashboard);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.dashboard, menu);
-        return true;
     }
 
     @Override
@@ -56,5 +50,18 @@ public class DashboardActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_dashboard);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    @Override
+    public void finishCurrentActivity() {
+        new UserPref(DashboardActivity.this).clearLogin();
+        Toast.makeText(DashboardActivity.this, "Logut Successfully", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(DashboardActivity.this, MainActivity.class));
+        finish();
+    }
+
+    @Override
+    public void cancelLogout() {
+        navController.navigate(R.id.nav_home);
     }
 }

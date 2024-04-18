@@ -29,6 +29,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         request = new FSRequest();
         myDialog = new MyDialog(MainActivity.this);
+        try{
+            String userID = new UserPref(MainActivity.this).getStringItem("userID");
+            if (userID != null) {
+                Intent intent = new Intent(MainActivity.this, DashboardActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }catch (Exception e){
+
+        }
+
         setListeners();
     }
 
@@ -58,10 +69,12 @@ public class MainActivity extends AppCompatActivity {
                             if (u != null) {
                                 new UserPref(MainActivity.this).storeLogin(MapForm.convertObjectToMap(u));
                                 Toast.makeText(MainActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(MainActivity.this, DashboardActivity.class);
+                                startActivity(intent);
+                                finish();
                             }
                         }
-                        Intent intent = new Intent(MainActivity.this, DashboardActivity.class);
-                        startActivity(intent);
+
                     }
 
                     @Override
