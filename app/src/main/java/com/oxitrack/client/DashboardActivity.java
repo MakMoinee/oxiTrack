@@ -2,6 +2,8 @@ package com.oxitrack.client;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +16,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.navigation.NavigationView;
 import com.oxitrack.client.databinding.ActivityDashboardBinding;
 import com.oxitrack.client.interfaces.LogoutListener;
+import com.oxitrack.client.models.Users;
 import com.oxitrack.client.preference.UserPref;
 
 public class DashboardActivity extends AppCompatActivity implements LogoutListener {
@@ -34,6 +37,12 @@ public class DashboardActivity extends AppCompatActivity implements LogoutListen
         setSupportActionBar(binding.appBarDashboard.toolbar);
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
+        View navView = binding.navView.getHeaderView(0);
+        TextView txtName = navView.findViewById(R.id.txtName);
+        Users users = new UserPref(DashboardActivity.this).getUsers();
+        if (users != null) {
+            txtName.setText(String.format("%s %s %s", users.getFirstName(), users.getMiddleName(), users.getLastName()));
+        }
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(

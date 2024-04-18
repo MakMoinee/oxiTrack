@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="15dp">
+
+        <TextView
+            android:id="@+id/lblAddPulse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/sen_medium"
+            android:text="Add Pulse"
+            android:textColor="@android:color/black"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/lblInstruction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lblAddPulse"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/sen_medium"
+            android:text="Instruction: Place Your Finger On The Oximeter"
+            android:textColor="@android:color/black" />
+
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_below="@+id/lblInstruction"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@android:color/transparent"
+            android:progress="50"
+            android:progressTint="@color/red" />
+
+        <TextView
+            android:id="@+id/txtCountDown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="190dp"
+            android:fontFamily="@font/sen_medium"
+            android:text="10"
+            android:textSize="45sp" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/progress"
+            android:layout_marginTop="20dp" />
+
+        <Button
+            android:id="@+id/btnStartRecord"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/spinner"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:enabled="false"
+            android:fontFamily="@font/sen_medium"
+            android:text="Start Record"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:theme="@style/CustomStyleYellow" />
+
+    </RelativeLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

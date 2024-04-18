@@ -21,11 +21,13 @@
 
     <style name="CustomStyleYellow" parent="Theme.Design.Light">
         <item name="colorPrimary">#FFEB3B</item>
-        <item name="colorAccent">#FFEB3B</item>
+        <item name="colorAccent">#000000</item>
+        <item name="colorOnPrimary">#FFEB3B</item>
     </style>
 
     <style name="CustomStyleBlue" parent="Theme.Design.Light">
         <item name="colorPrimary">#03A9F4</item>
         <item name="colorAccent">#2196F3</item>
+        <item name="colorOnPrimary">#03A9F4</item>
     </style>
 </resources>
