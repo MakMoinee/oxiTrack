@@ -1,8 +1,10 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.gms.google-services'
 }
 
 android {
+    useLibrary 'org.apache.http.legacy'
     namespace 'com.oxitrack.client'
     compileSdk 34
 
@@ -30,9 +32,39 @@ android {
     buildFeatures{
         viewBinding true
     }
+    packagingOptions {
+        exclude 'META-INF/NOTICE.md'
+        exclude 'META-INF/LICENSE.md'
+        exclude 'META-INF/versions/9/module-info.class'
+        exclude 'module-info.class'
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LGPL2.1'
+    }
 }
 
 dependencies {
+
+    implementation platform('com.google.firebase:firebase-bom:32.8.0')
+    implementation 'com.google.firebase:firebase-firestore'
+    implementation'com.github.MakMoinee:library:1.0.1-rc2'
+    implementation 'org.projectlombok:lombok:1.18.28'
+    annotationProcessor 'org.projectlombok:lombok:1.18.28'
+    testImplementation 'org.projectlombok:lombok:1.18.28'
+    androidTestImplementation 'org.projectlombok:lombok:1.18.28'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.1'
+    implementation 'org.apache.httpcomponents:httpmime:4.5.13'
+    implementation 'com.google.zxing:core:3.3.2'
+    implementation 'com.google.zxing:javase:3.3.2'
+    implementation 'at.favre.lib:bcrypt:0.10.2'
+
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.11.0'

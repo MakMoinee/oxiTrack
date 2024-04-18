@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "958211948748",
+    "project_id": "oxitrack-f9748",
+    "storage_bucket": "oxitrack-f9748.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:958211948748:android:6d1b4efca8082d75ce8269",
+        "android_client_info": {
+          "package_name": "com.oxitrack.client"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCeVwCnEORXFvH3-QeWANe0l_c0cFKpWdU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
