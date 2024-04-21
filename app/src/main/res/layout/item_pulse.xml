@@ -21,6 +21,7 @@
                 android:id="@+id/imgPulse"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
+                android:layout_centerVertical="true"
                 android:src="@drawable/pulse" />
 
             <TextView
@@ -28,10 +29,37 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
-                android:layout_centerVertical="true"
+                android:layout_marginTop="10dp"
                 android:layout_toRightOf="@+id/imgPulse"
                 android:fontFamily="@font/sen_medium"
                 android:text="BPM:"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/txtIP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtBPM"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@+id/imgPulse"
+                android:fontFamily="@font/sen_medium"
+                android:text="IP:"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/txtDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtIP"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:layout_toRightOf="@+id/imgPulse"
+                android:fontFamily="@font/sen_medium"
+                android:text="Date:"
                 android:textColor="@android:color/black"
                 android:textSize="16sp" />
 

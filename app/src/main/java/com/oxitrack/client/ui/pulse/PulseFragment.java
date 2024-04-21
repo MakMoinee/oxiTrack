@@ -1,6 +1,7 @@
 package com.oxitrack.client.ui.pulse;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.github.MakMoinee.library.dialogs.MyDialog;
+import com.github.MakMoinee.library.services.Utils;
 import com.oxitrack.client.adapters.DeviceSpinAdapter;
 import com.oxitrack.client.adapters.PulseAdapter;
 import com.oxitrack.client.databinding.DialogAddPulseBinding;
@@ -29,7 +31,12 @@ import com.oxitrack.client.preference.UserPref;
 import com.oxitrack.client.services.FSRequest;
 import com.oxitrack.client.services.VRequest;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 public class PulseFragment extends Fragment {
@@ -72,11 +79,24 @@ public class PulseFragment extends Fragment {
             @Override
             public void onSucessPulseList(List<Pulse> pulseList) {
                 if (pulseList.size() > 0) {
-                    pulseAdapter = new PulseAdapter(requireContext(), pulseList, new PulseAdapterListener() {
-                        @Override
-                        public void onClick(Pulse pulse) {
 
+                    Collections.sort(pulseList, (p1, p2) -> {
+                        // Parse the date strings to compare them
+                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm a");
+                        try {
+                            Date date1 = format.parse(p1.getDate());
+                            Date date2 = format.parse(p2.getDate());
+                            return date1.compareTo(date2);
+                        } catch (ParseException e) {
+                            if (e != null && e.getLocalizedMessage() != null) {
+                                Log.e("pulse_error", e.getLocalizedMessage());
+                            }
                         }
+                        return 0;
+                    });
+
+                    pulseAdapter = new PulseAdapter(requireContext(), pulseList, pulse -> {
+
                     });
                     binding.recycler.setLayoutManager(new LinearLayoutManager(requireContext()));
                     binding.recycler.setAdapter(pulseAdapter);
@@ -155,14 +175,16 @@ public class PulseFragment extends Fragment {
                                     myDialog.setCustomMessage("Saving Pulse Data ...");
                                     myDialog.show();
                                     pulse.setUserID(userID);
-
+                                    pulse.setIp(currentDevice.getDeviceIP());
+                                    String date = Utils.getCurrentDate("yyyy-MM-dd hh:mm a");
+                                    pulse.setDate(date);
                                     request.savePulse(pulse, new PulseFSListener() {
                                         @Override
                                         public <T> void onSuccess(T any) {
                                             myDialog.dismiss();
                                             Toast.makeText(requireContext(), "Successfully Saved Pulse Data", Toast.LENGTH_SHORT).show();
                                             addDialog.dismiss();
-
+                                            loadAllPulses();
                                         }
 
                                         @Override
@@ -188,6 +210,8 @@ public class PulseFragment extends Fragment {
 
     private void loadDialogSpin() {
         if (devicesList.size() > 0) {
+
+
             adapter = new DeviceSpinAdapter(requireContext(), android.R.layout.simple_spinner_item, devicesList, new DeviceAdapterListener() {
                 @Override
                 public void onClick(Devices devices) {

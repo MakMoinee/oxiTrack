@@ -2,6 +2,7 @@ package com.oxitrack.client.ui.devices;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -187,9 +188,8 @@ public class DeviceFragment extends Fragment {
                 FirestoreRequestBody body = new FirestoreRequestBody.FirestoreRequestBodyBuilder()
                         .setCollectionName(FSRequest.DEVICE_COLLECTION)
                         .setParams(MapForm.convertObjectToMap(processDevice))
-                        .setEmail(processDevice.getDeviceIP())
                         .setWhereFromField("deviceIP")
-                        .setWhereValueField(processDevice.getDeviceID())
+                        .setWhereValueField(processDevice.getDeviceIP())
                         .build();
 
                 request.insertUniqueData(body, new FirestoreListener() {
@@ -205,6 +205,9 @@ public class DeviceFragment extends Fragment {
                     @Override
                     public void onError(Error error) {
                         myDialog.dismiss();
+                        if (error != null && error.getLocalizedMessage() != null) {
+                            Log.e("error_add_device", error.getLocalizedMessage());
+                        }
                         Toast.makeText(requireContext(), "Failed To Add Device, Please Try Again Later", Toast.LENGTH_SHORT).show();
                     }
                 });

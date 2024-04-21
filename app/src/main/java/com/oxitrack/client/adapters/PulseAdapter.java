@@ -39,6 +39,8 @@ public class PulseAdapter extends RecyclerView.Adapter<PulseAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull PulseAdapter.ViewHolder holder, int position) {
         Pulse pulse = pulseList.get(position);
         holder.txtBPM.setText(String.format("BPM: %1.2f", pulse.getBPM()));
+        holder.txtIP.setText(String.format("IP: %s", pulse.getIp()));
+        holder.txtDate.setText(String.format("Date: %s", pulse.getDate()));
     }
 
     @Override
@@ -47,11 +49,13 @@ public class PulseAdapter extends RecyclerView.Adapter<PulseAdapter.ViewHolder> 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView txtBPM;
+        TextView txtBPM, txtIP, txtDate;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             txtBPM = itemView.findViewById(R.id.txtBPM);
+            txtIP = itemView.findViewById(R.id.txtIP);
+            txtDate = itemView.findViewById(R.id.txtDate);
         }
     }
 }
