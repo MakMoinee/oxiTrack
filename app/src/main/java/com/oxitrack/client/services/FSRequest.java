@@ -10,9 +10,11 @@ import com.github.MakMoinee.library.services.HashPass;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.oxitrack.client.interfaces.DeviceFSListener;
+import com.oxitrack.client.interfaces.DoctorRequestListener;
 import com.oxitrack.client.interfaces.PulseFSListener;
 import com.oxitrack.client.interfaces.PulseListener;
 import com.oxitrack.client.models.Devices;
+import com.oxitrack.client.models.Doctor;
 import com.oxitrack.client.models.Pulse;
 import com.oxitrack.client.models.Users;
 
@@ -22,6 +24,7 @@ import java.util.List;
 public class FSRequest extends FirestoreRequest {
     public static final String DEVICE_COLLECTION = "devices";
     public static final String PULSE_COLLECTION = "pulses";
+    public static final String DOCTOR_COLLECTION = "doctors";
 
     public FSRequest() {
         super();
@@ -195,6 +198,94 @@ public class FSRequest extends FirestoreRequest {
             public void onError(Error error) {
                 if (error != null && error.getLocalizedMessage() != null) {
                     Log.e("error_pulse", error.getLocalizedMessage());
+                }
+                listener.onError(error);
+            }
+        });
+    }
+
+    public void insertDoctor(Doctor doctor, FirestoreListener listener) {
+        FirestoreRequestBody body = new FirestoreRequestBody.FirestoreRequestBodyBuilder()
+                .setCollectionName(DOCTOR_COLLECTION)
+                .setParams(MapForm.convertObjectToMap(doctor))
+                .setWhereFromField("email")
+                .setWhereValueField(doctor.getEmail())
+                .build();
+        this.insertOnly(body, new FirestoreListener() {
+            @Override
+            public <T> void onSuccess(T any) {
+                listener.onSuccess("success");
+            }
+
+            @Override
+            public void onError(Error error) {
+                if (error != null && error.getLocalizedMessage() != null) {
+                    Log.e("error_doctor", error.getLocalizedMessage());
+                }
+                listener.onError(error);
+            }
+        });
+    }
+
+    public void getAllDoctors(String userID, DoctorRequestListener listener) {
+        FirestoreRequestBody body = new FirestoreRequestBody.FirestoreRequestBodyBuilder()
+                .setCollectionName(DOCTOR_COLLECTION)
+                .setWhereValueField("userID")
+                .setWhereValueField(userID)
+                .build();
+        this.findAll(body, new FirestoreListener() {
+            @Override
+            public <T> void onSuccess(T any) {
+                if (any instanceof QuerySnapshot) {
+                    List<Doctor> doctorList = new ArrayList<>();
+                    QuerySnapshot snapshots = (QuerySnapshot) any;
+                    if (!snapshots.isEmpty()) {
+                        for (DocumentSnapshot documentSnapshot : snapshots) {
+                            if (documentSnapshot.exists()) {
+                                Doctor doctor = documentSnapshot.toObject(Doctor.class);
+                                if (doctor != null) {
+                                    doctor.setDoctorID(documentSnapshot.getId());
+                                    doctorList.add(doctor);
+                                }
+                            }
+                        }
+
+                        if (doctorList.size() == snapshots.size()) {
+                            if (doctorList.size() > 0) {
+                                listener.onSuccess(doctorList);
+                            } else {
+                                listener.onError(new Error("empty"));
+                            }
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Error error) {
+                if (error != null && error.getLocalizedMessage() != null) {
+                    Log.e("error_doctor", error.getLocalizedMessage());
+                }
+                listener.onError(error);
+            }
+        });
+    }
+
+    public void deleteDoctor(String doctorID, FirestoreListener listener) {
+        FirestoreRequestBody body = new FirestoreRequestBody.FirestoreRequestBodyBuilder()
+                .setCollectionName(DOCTOR_COLLECTION)
+                .setDocumentID(doctorID)
+                .build();
+        this.delete(body, new FirestoreListener() {
+            @Override
+            public <T> void onSuccess(T any) {
+                listener.onSuccess("success");
+            }
+
+            @Override
+            public void onError(Error error) {
+                if (error != null && error.getLocalizedMessage() != null) {
+                    Log.e("error_doctor", error.getLocalizedMessage());
                 }
                 listener.onError(error);
             }

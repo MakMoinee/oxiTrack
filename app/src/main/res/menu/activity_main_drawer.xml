@@ -13,6 +13,10 @@
             android:icon="@drawable/ic_devices"
             android:title="Devices" />
         <item
+            android:id="@+id/nav_doctors"
+            android:icon="@drawable/doctor"
+            android:title="Doctors" />
+        <item
             android:id="@+id/nav_pulse"
             android:icon="@drawable/ic_heart"
             android:title="My Pulse" />

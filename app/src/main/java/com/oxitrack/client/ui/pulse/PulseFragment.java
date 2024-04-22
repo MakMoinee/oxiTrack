@@ -15,18 +15,23 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.github.MakMoinee.library.dialogs.MyDialog;
+import com.github.MakMoinee.library.services.Demail;
 import com.github.MakMoinee.library.services.Utils;
 import com.oxitrack.client.adapters.DeviceSpinAdapter;
 import com.oxitrack.client.adapters.PulseAdapter;
+import com.oxitrack.client.configs.EmailConfigs;
 import com.oxitrack.client.databinding.DialogAddPulseBinding;
 import com.oxitrack.client.databinding.FragmentPulseBinding;
 import com.oxitrack.client.interfaces.DeviceAdapterListener;
 import com.oxitrack.client.interfaces.DeviceFSListener;
+import com.oxitrack.client.interfaces.DoctorRequestListener;
 import com.oxitrack.client.interfaces.PulseAdapterListener;
 import com.oxitrack.client.interfaces.PulseFSListener;
 import com.oxitrack.client.interfaces.PulseListener;
 import com.oxitrack.client.models.Devices;
+import com.oxitrack.client.models.Doctor;
 import com.oxitrack.client.models.Pulse;
+import com.oxitrack.client.models.Users;
 import com.oxitrack.client.preference.UserPref;
 import com.oxitrack.client.services.FSRequest;
 import com.oxitrack.client.services.VRequest;
@@ -41,6 +46,11 @@ import java.util.List;
 
 public class PulseFragment extends Fragment {
 
+    private final float NORMAL_BPM = 100;
+    private final float HIGH_BPM = 121; //GREATER
+    private final float LOW_BPM = 99; //BELOW
+
+
     FragmentPulseBinding binding;
     DialogAddPulseBinding dialogAddPulseBinding;
     AlertDialog addDialog;
@@ -53,6 +63,7 @@ public class PulseFragment extends Fragment {
     MyDialog myDialog;
 
     PulseAdapter pulseAdapter;
+    Demail demail;
 
 
     @Nullable
@@ -63,6 +74,15 @@ public class PulseFragment extends Fragment {
         request = new FSRequest();
         vRequest = new VRequest(requireContext());
         myDialog = new MyDialog(requireContext());
+        demail = new Demail(
+                requireContext(),
+                EmailConfigs.emailHost,
+                EmailConfigs.emailPort,
+                EmailConfigs.emailClass,
+                EmailConfigs.emailAuth,
+                EmailConfigs.emailAdd,
+                EmailConfigs.emailPass
+        );
         loadAllDevices();
         loadAllPulses();
         return binding.getRoot();
@@ -184,6 +204,7 @@ public class PulseFragment extends Fragment {
                                             myDialog.dismiss();
                                             Toast.makeText(requireContext(), "Successfully Saved Pulse Data", Toast.LENGTH_SHORT).show();
                                             addDialog.dismiss();
+                                            notifyDoctor(pulse.getBPM());
                                             loadAllPulses();
                                         }
 
@@ -206,6 +227,37 @@ public class PulseFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private void notifyDoctor(float bp) {
+        String message = "";
+        if (bp >= HIGH_BPM) {
+            message = "HIGH BP";
+        } else if (bp <= LOW_BPM) {
+            message = "LOW BP";
+        } else {
+            message = "";
+        }
+
+        if (message != "") {
+            Users users = new UserPref(requireContext()).getUsers();
+            String subject = String.format("%s %s %s - Pulse Rate Update", users.getFirstName(), users.getMiddleName(), users.getLastName());
+            String emailMessage = String.format("Good Day, \n You are registered as one of the trusted doctors of %s %s %s thus we are notifying you that he or she has taken pulse rate via OxiTrack and has been recorded that he or she has %s: %1.2f\n\n Please act accordingly, Thanks \n\n From: OxiTrack \n\n----DO NOT REPLY----", users.getFirstName(), users.getMiddleName(), users.getLastName(), message, bp);
+            request.getAllDoctors(users.getUserID(), new DoctorRequestListener() {
+                @Override
+                public void onSuccess(List<Doctor> doctorList) {
+                    for (Doctor doctor : doctorList) {
+                        demail.sendEmail(doctor.getEmail(), subject, emailMessage);
+                    }
+                }
+
+                @Override
+                public void onError(Error error) {
+
+                }
+            });
+        }
+
     }
 
     private void loadDialogSpin() {

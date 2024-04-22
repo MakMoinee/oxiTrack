@@ -13,3 +13,6 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+app/src/main/java/com/oxitrack/client/configs
+app/src/main/java/com/oxitrack/client/configs/*
